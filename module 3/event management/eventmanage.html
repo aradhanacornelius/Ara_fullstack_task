@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Eventora - Event Management</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #faf8ff;
+            color: #222;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: bold;
+            color: #7c3aed;
+        }
+
+        .logo span {
+            color: #f97316;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 35px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        nav ul li a:hover {
+            color: #7c3aed;
+        }
+
+        .nav-btn {
+            background: #7c3aed;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 25px;
+            text-decoration: none;
+        }
+
+        /* HERO */
+
+        .hero {
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 70px 8%;
+            background:
+                radial-gradient(circle at 80% 20%, #ddd6fe, transparent 30%),
+                radial-gradient(circle at 20% 80%, #fed7aa, transparent 25%),
+                #faf8ff;
+        }
+
+        .hero-text {
+            width: 50%;
+        }
+
+        .hero-text small {
+            color: #7c3aed;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .hero-text h1 {
+            font-size: 60px;
+            line-height: 1.1;
+            margin: 18px 0;
+        }
+
+        .hero-text h1 span {
+            color: #7c3aed;
+        }
+
+        .hero-text p {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.7;
+            max-width: 550px;
+        }
+
+        .hero-buttons {
+            margin-top: 30px;
+        }
+
+        .primary-btn {
+            display: inline-block;
+            padding: 15px 28px;
+            background: #7c3aed;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            margin-right: 12px;
+            box-shadow: 0 10px 25px rgba(124,58,237,0.3);
+        }
+
+        .secondary-btn {
+            display: inline-block;
+            padding: 15px 28px;
+            border: 1px solid #ddd;
+            color: #333;
+            border-radius: 30px;
+            text-decoration: none;
+            background: white;
+        }
+
+        /* HERO IMAGE AREA */
+
+        .hero-image {
+            width: 43%;
+            height: 430px;
+            border-radius: 35px;
+            background:
+                linear-gradient(
+                    rgba(124,58,237,0.15),
+                    rgba(249,115,22,0.2)
+                ),
+                url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80");
+
+            background-size: cover;
+            background-position: center;
+
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+
+            position: relative;
+        }
+
+        .floating-card {
+            position: absolute;
+            bottom: 25px;
+            left: -30px;
+            background: white;
+            padding: 18px 25px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .floating-card strong {
+            font-size: 25px;
+            color: #7c3aed;
+        }
+
+        /* SECTION */
+
+        section {
+            padding: 80px 8%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .section-title h2 {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #777;
+        }
+
+        /* EVENT TYPES */
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .event-card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid #eee;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .event-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .event-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .event-card h3 {
+            margin-bottom: 8px;
+        }
+
+        .event-card p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* BOOKING */
+
+        .booking {
+            background: #18121f;
+            color: white;
+        }
+
+        .booking-container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .booking-box {
+            background: rgba(255,255,255,0.08);
+            padding: 40px;
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+        }
+
+        .booking-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .input-box {
+            flex: 1;
+            margin-bottom: 20px;
+        }
+
+        .input-box label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        .input-box input,
+        .input-box select,
+        .input-box textarea {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            font-size: 15px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: #8b5cf6;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #a78bfa;
+            transform: translateY(-2px);
+        }
+
+        /* SERVICES */
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .service {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #eee;
+        }
+
+        .service-icon {
+            font-size: 35px;
+            margin-bottom: 15px;
+        }
+
+        .service h3 {
+            margin-bottom: 10px;
+        }
+
+        .service p {
+            color: #777;
+            line-height: 1.6;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #0f0b13;
+            color: white;
+            padding: 40px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer p {
+            color: #aaa;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 900px) {
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-text,
+            .hero-image {
+                width: 100%;
+            }
+
+            .hero-image {
+                margin-top: 40px;
+            }
+
+            .event-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .services {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                display: none;
+            }
+        }
+
+        @media(max-width: 600px) {
+
+            .hero-text h1 {
+                font-size: 42px;
+            }
+
+            .event-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVIGATION -->
+
+<nav>
+
+    <div class="logo">
+        Event<span>ora</span>
+    </div>
+
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#booking">Plan Event</a></li>
+    </ul>
+
+    <a href="#booking" class="nav-btn">
+        Get Started
+    </a>
+
+</nav>
+
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+
+    <div class="hero-text">
+
+        <small>✨ MAKE YOUR MOMENTS MEMORABLE</small>
+
+        <h1>
+            We Create
+            <span>Unforgettable</span>
+            Events.
+        </h1>
+
+        <p>
+            From intimate celebrations to grand occasions,
+            Eventora helps you plan, organize and celebrate
+            every special moment beautifully.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#booking" class="primary-btn">
+                Plan My Event →
+            </a>
+
+            <a href="#events" class="secondary-btn">
+                Explore Events
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-image">
+
+        <div class="floating-card">
+
+            <strong>500+</strong>
+
+            <br>
+
+            Happy Events 🎉
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- EVENT TYPES -->
+
+<section id="events">
+
+    <div class="section-title">
+
+        <h2>What Are You Celebrating?</h2>
+
+        <p>
+            Choose an event and let us take care of the rest.
+        </p>
+
+    </div>
+
+
+    <div class="event-grid">
+
+        <div class="event-card">
+
+            <div class="event-icon">💍</div>
+
+            <h3>Wedding</h3>
+
+            <p>
+                Make your special day magical.
+            </p>
+
+        </div>
+
+
+        <div class="event-card">
+
+            <div class="event-icon">🎂</div>
+
+            <h3>Birthday</h3>
+
+            <p>
+                Celebrate another amazing year.
+            </p>
+
+        </div>
+
+
+        <div class="event-card">
+
+            <div class="event-icon">🎓</div>
+
+            <h3>College Event</h3>
+
+            <p>
+                Create memorable campus moments.
+            </p>
+
+        </div>
+
+
+        <div class="event-card">
+
+            <div class="event-icon">💼</div>
+
+            <h3>Corporate</h3>
+
+            <p>
+                Professional events made easy.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- SERVICES -->
+
+<section id="services">
+
+    <div class="section-title">
+
+        <h2>Everything You Need</h2>
+
+        <p>
+            We handle the details so you can enjoy the moment.
+        </p>
+
+    </div>
+
+
+    <div class="services">
+
+        <div class="service">
+
+            <div class="service-icon">🎨</div>
+
+            <h3>Event Decoration</h3>
+
+            <p>
+                Beautiful themes, decorations and
+                customized event setups.
+            </p>
+
+        </div>
+
+
+        <div class="service">
+
+            <div class="service-icon">🍽️</div>
+
+            <h3>Catering</h3>
+
+            <p>
+                Delicious menus designed according
+                to your event and guests.
+            </p>
+
+        </div>
+
+
+        <div class="service">
+
+            <div class="service-icon">📸</div>
+
+            <h3>Photography</h3>
+
+            <p>
+                Capture every beautiful moment
+                of your special day.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- BOOKING -->
+
+<section class="booking" id="booking">
+
+    <div class="booking-container">
+
+        <div class="section-title">
+
+            <h2>Let's Plan Your Event</h2>
+
+            <p>
+                Tell us a little about your event.
+            </p>
+
+        </div>
+
+
+        <div class="booking-box">
+
+            <form id="eventForm">
+
+
+                <div class="booking-row">
+
+                    <div class="input-box">
+
+                        <label>Your Name</label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter your name"
+                            required>
+
+                    </div>
+
+
+                    <div class="input-box">
+
+                        <label>Email</label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="you@example.com"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="booking-row">
+
+                    <div class="input-box">
+
+                        <label>Event Type</label>
+
+                        <select id="eventType" required>
+
+                            <option value="">
+                                Select event type
+                            </option>
+
+                            <option>Wedding</option>
+                            <option>Birthday</option>
+                            <option>College Event</option>
+                            <option>Corporate Event</option>
+                            <option>Conference</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="input-box">
+
+                        <label>Number of Guests</label>
+
+                        <input
+                            type="number"
+                            id="guests"
+                            min="1"
+                            placeholder="50"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="booking-row">
+
+                    <div class="input-box">
+
+                        <label>Event Date</label>
+
+                        <input
+                            type="date"
+                            id="date"
+                            required>
+
+                    </div>
+
+
+                    <div class="input-box">
+
+                        <label>Event Location</label>
+
+                        <input
+                            type="text"
+                            id="location"
+                            placeholder="Enter venue"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="input-box">
+
+                    <label>Tell us about your event</label>
+
+                    <textarea
+                        id="details"
+                        placeholder="Theme, decoration, catering, photography etc."></textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="submit-btn">
+
+                    ✨ Start Planning My Event
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div>
+
+        <h2>Eventora</h2>
+
+        <p>
+            Creating moments worth remembering.
+        </p>
+
+    </div>
+
+    <p>
+        © 2026 Eventora. All rights reserved.
+    </p>
+
+</footer>
+
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+    const form = document.getElementById("eventForm");
+
+
+    form.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+
+        const name =
+            document.getElementById("name").value;
+
+        const eventType =
+            document.getElementById("eventType").value;
+
+        const guests =
+            document.getElementById("guests").value;
+
+        const date =
+            document.getElementById("date").value;
+
+
+        if (name === "" ||
+            eventType === "" ||
+            guests === "" ||
+            date === "") {
+
+            alert("Please fill all required details.");
+
+            return;
+
+        }
+
+
+        alert(
+            "🎉 Thank you, " + name +
+            "!\n\nYour " + eventType +
+            " event for " + guests +
+            " guests has been submitted successfully!"
+        );
+
+
+        form.reset();
+
+    });
+
+</script>
+
+
+</body>
+
+</html>
+
